@@ -1,46 +1,47 @@
 #include "scan.h"
+#include <assert.h>
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-const char* tokentype_name[TOK_COUNT] = {
-    /*[TOK_eof] =*/ "eof",
-    /*[TOK_err] =*/ "err",
-    /*[TOK_ident] =*/ "ident",
-    /*[TOK_auto] =*/ "auto",
-    /*[TOK_double] =*/ "double",
-    /*[TOK_int] =*/ "int",
-    /*[TOK_struct] =*/ "struct",
-    /*[TOK_break] =*/ "break",
-    /*[TOK_else] =*/ "else",
-    /*[TOK_long] =*/ "long",
-    /*[TOK_switch] =*/ "switch",
-    /*[TOK_case] =*/ "case",
-    /*[TOK_enum] =*/ "enum",
-    /*[TOK_register] =*/ "register",
-    /*[TOK_typedef] =*/ "typedef",
-    /*[TOK_char] =*/ "char",
-    /*[TOK_extern] =*/ "extern",
-    /*[TOK_return] =*/ "return",
-    /*[TOK_union] =*/ "union",
-    /*[TOK_const] =*/ "const",
-    /*[TOK_float] =*/ "float",
-    /*[TOK_short] =*/ "short",
-    /*[TOK_unsigned] =*/ "unsigned",
-    /*[TOK_continue] =*/ "continue",
-    /*[TOK_for] =*/ "for",
-    /*[TOK_signed] =*/ "signed",
-    /*[TOK_void] =*/ "void",
-    /*[TOK_default] =*/ "default",
-    /*[TOK_goto] =*/ "goto",
-    /*[TOK_sizeof] =*/ "sizeof",
-    /*[TOK_volatile] =*/ "volatile",
-    /*[TOK_do] =*/ "do",
-    /*[TOK_if] =*/ "if",
-    /*[TOK_static] =*/ "static",
-    /*[TOK_while] =*/ "while",
+const char *tokentype_name[TOK_COUNT] = {
+    /*[TOK_eof] =*/"eof",
+    /*[TOK_err] =*/"err",
+    /*[TOK_ident] =*/"ident",
+    /*[TOK_auto] =*/"auto",
+    /*[TOK_double] =*/"double",
+    /*[TOK_int] =*/"int",
+    /*[TOK_struct] =*/"struct",
+    /*[TOK_break] =*/"break",
+    /*[TOK_else] =*/"else",
+    /*[TOK_long] =*/"long",
+    /*[TOK_switch] =*/"switch",
+    /*[TOK_case] =*/"case",
+    /*[TOK_enum] =*/"enum",
+    /*[TOK_register] =*/"register",
+    /*[TOK_typedef] =*/"typedef",
+    /*[TOK_char] =*/"char",
+    /*[TOK_extern] =*/"extern",
+    /*[TOK_return] =*/"return",
+    /*[TOK_union] =*/"union",
+    /*[TOK_const] =*/"const",
+    /*[TOK_float] =*/"float",
+    /*[TOK_short] =*/"short",
+    /*[TOK_unsigned] =*/"unsigned",
+    /*[TOK_continue] =*/"continue",
+    /*[TOK_for] =*/"for",
+    /*[TOK_signed] =*/"signed",
+    /*[TOK_void] =*/"void",
+    /*[TOK_default] =*/"default",
+    /*[TOK_goto] =*/"goto",
+    /*[TOK_sizeof] =*/"sizeof",
+    /*[TOK_volatile] =*/"volatile",
+    /*[TOK_do] =*/"do",
+    /*[TOK_if] =*/"if",
+    /*[TOK_static] =*/"static",
+    /*[TOK_while] =*/"while",
 };
 
 Lexer lexer_from_source(const char *source, size_t length) {
@@ -104,105 +105,104 @@ static void skip_ws(Lexer *lexer) {
 
 static char current(Lexer *lexer) { return lexer->source[lexer->idx]; }
 
-static TokenType ident_type(const char *value) {
+static TokenType ident_type(const char *value, size_t len) {
     /* TODO: optimize with a switch tree (?). */
-    if (strcmp("auto", value) == 0)
+    if (strncmp("auto", value, len) == 0)
         return TOK_auto;
-    else if (strcmp("double", value) == 0)
+    else if (strncmp("double", value, len) == 0)
         return TOK_double;
-    else if (strcmp("int", value) == 0)
+    else if (strncmp("int", value, len) == 0)
         return TOK_int;
-    else if (strcmp("struct", value) == 0)
+    else if (strncmp("struct", value, len) == 0)
         return TOK_struct;
-    else if (strcmp("break", value) == 0)
+    else if (strncmp("break", value, len) == 0)
         return TOK_break;
-    else if (strcmp("else", value) == 0)
+    else if (strncmp("else", value, len) == 0)
         return TOK_else;
-    else if (strcmp("long", value) == 0)
+    else if (strncmp("long", value, len) == 0)
         return TOK_long;
-    else if (strcmp("switch", value) == 0)
+    else if (strncmp("switch", value, len) == 0)
         return TOK_switch;
-    else if (strcmp("case", value) == 0)
+    else if (strncmp("case", value, len) == 0)
         return TOK_case;
-    else if (strcmp("enum", value) == 0)
+    else if (strncmp("enum", value, len) == 0)
         return TOK_enum;
-    else if (strcmp("register", value) == 0)
+    else if (strncmp("register", value, len) == 0)
         return TOK_register;
-    else if (strcmp("typedef", value) == 0)
+    else if (strncmp("typedef", value, len) == 0)
         return TOK_typedef;
-    else if (strcmp("char", value) == 0)
+    else if (strncmp("char", value, len) == 0)
         return TOK_char;
-    else if (strcmp("extern", value) == 0)
+    else if (strncmp("extern", value, len) == 0)
         return TOK_extern;
-    else if (strcmp("return", value) == 0)
+    else if (strncmp("return", value, len) == 0)
         return TOK_return;
-    else if (strcmp("union", value) == 0)
+    else if (strncmp("union", value, len) == 0)
         return TOK_union;
-    else if (strcmp("const", value) == 0)
+    else if (strncmp("const", value, len) == 0)
         return TOK_const;
-    else if (strcmp("float", value) == 0)
+    else if (strncmp("float", value, len) == 0)
         return TOK_float;
-    else if (strcmp("short", value) == 0)
+    else if (strncmp("short", value, len) == 0)
         return TOK_short;
-    else if (strcmp("unsigned", value) == 0)
+    else if (strncmp("unsigned", value, len) == 0)
         return TOK_unsigned;
-    else if (strcmp("continue", value) == 0)
+    else if (strncmp("continue", value, len) == 0)
         return TOK_continue;
-    else if (strcmp("for", value) == 0)
+    else if (strncmp("for", value, len) == 0)
         return TOK_for;
-    else if (strcmp("signed", value) == 0)
+    else if (strncmp("signed", value, len) == 0)
         return TOK_signed;
-    else if (strcmp("void", value) == 0)
+    else if (strncmp("void", value, len) == 0)
         return TOK_void;
-    else if (strcmp("default", value) == 0)
+    else if (strncmp("default", value, len) == 0)
         return TOK_default;
-    else if (strcmp("goto", value) == 0)
+    else if (strncmp("goto", value, len) == 0)
         return TOK_goto;
-    else if (strcmp("sizeof", value) == 0)
+    else if (strncmp("sizeof", value, len) == 0)
         return TOK_sizeof;
-    else if (strcmp("volatile", value) == 0)
+    else if (strncmp("volatile", value, len) == 0)
         return TOK_volatile;
-    else if (strcmp("do", value) == 0)
+    else if (strncmp("do", value, len) == 0)
         return TOK_do;
-    else if (strcmp("if", value) == 0)
+    else if (strncmp("if", value, len) == 0)
         return TOK_if;
-    else if (strcmp("static", value) == 0)
+    else if (strncmp("static", value, len) == 0)
         return TOK_static;
-    else if (strcmp("while", value) == 0)
+    else if (strncmp("while", value, len) == 0)
         return TOK_while;
     else
         return TOK_ident;
 }
 
+#define isident(ch) ((ch) == '_' || isalnum(ch))
+
 Token lexer_next(Lexer *lexer) {
     Token t = {0};
-    const char *begin = lexer->source + lexer->idx;
-    size_t len = 0;
+    char ch;
     skip_ws(lexer);
     t.row = lexer->row;
     t.col = lexer->col;
-    t.src = NULL;
+    t.src = &lexer->source[lexer->idx];
 
     if (is_at_end(lexer)) {
         t.type = TOK_eof;
         return t;
     }
 
-    if (isalpha(current(lexer))) {
-        while (!is_at_end(lexer) &&
-               (current(lexer) == '_' || isalnum(current(lexer)))) {
-            if (t.type == 0 && !islower(consume(lexer))) t.type = TOK_ident;
-            len++;
+    ch = current(lexer);
+
+    if (isalpha(ch)) {
+        while (!is_at_end(lexer) && isident(current(lexer))) {
+            t.len++;
+            consume(lexer);
         }
-        t.src = malloc(len + 1);
-        strncpy(t.src, begin, len); /* strncpy also does sentinel */
-        if (t.type == 0) t.type = ident_type(t.src);
+        t.type = ident_type(t.src, t.len);
         return t;
     }
 
     t.type = TOK_err;
-    t.src = malloc(2);
-    t.src[0] = consume(lexer);
-    t.src[1] = 0;
+    consume(lexer);
+    t.len = 1;
     return t;
 }

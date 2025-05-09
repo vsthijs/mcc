@@ -50,14 +50,9 @@ extern const char *tokentype_name[];
 
 typedef struct {
     TokenType type;
-    char *src;
-    size_t row, col;
+    const char *src;
+    size_t len, row, col;
 } Token;
-
-#define free_token(tok)                                                        \
-    do {                                                                       \
-        if ((tok).src != NULL) free((tok).src);                                \
-    } while (0)
 
 typedef struct {
     size_t row, col, idx;

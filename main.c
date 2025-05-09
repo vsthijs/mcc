@@ -10,6 +10,7 @@ int main(int argc, char **argv) {
     char *curr;
     Lexer lexer;
     Token t;
+    t.type = TOK_err;
 
     while (arg < argc) {
         curr = argv[arg++];
@@ -22,11 +23,10 @@ int main(int argc, char **argv) {
     for (ii = 0; ii < files.count; ii++) {
         printf("file %s\n", files.items[ii]);
         lexer = lexer_from_file(files.items[ii]);
-        while (t.type != TOK_eof) {
+        do {
             t = lexer_next(&lexer);
-            printf("%s:%lu:%lu: `%s` (%s)\n", files.items[ii], t.row, t.col, t.src, tokentype_name[t.type]);
-            free_token(t);
-        }
+            printf("%s:%lu:%lu: `%.*s` (%s)\n", files.items[ii], t.row, t.col, (int)t.len, t.src, tokentype_name[t.type]);
+        } while (t.type != TOK_eof);
     }
     da_free(files);
     return 0;
