@@ -1,0 +1,32 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-pedantic",
+      "-ansi",
+      "-o",
+      "mcc",
+      "main.c"
+    ],
+    "directory": "/home/tvstraaten/mcc",
+    "file": "/home/tvstraaten/mcc/main.c",
+    "output": "/home/tvstraaten/mcc/mcc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-pedantic",
+      "-ansi",
+      "-o",
+      "mcc",
+      "scan.c"
+    ],
+    "directory": "/home/tvstraaten/mcc",
+    "file": "/home/tvstraaten/mcc/scan.c",
+    "output": "/home/tvstraaten/mcc/mcc"
+  }
+]

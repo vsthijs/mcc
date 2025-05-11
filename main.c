@@ -25,7 +25,12 @@ int main(int argc, char **argv) {
         lexer = lexer_from_file(files.items[ii]);
         do {
             t = lexer_next(&lexer);
-            printf("%s:%lu:%lu: `%.*s` (%s)\n", files.items[ii], t.row, t.col, (int)t.len, t.src, tokentype_name[t.type]);
+            if (t.type == TOK_err) {
+                printf("%s:%lu:%lu: error: unexpected character '%c'\n", files.items[ii], t.row, t.col, *t.src);
+                break;
+            } else {
+                printf("%s:%lu:%lu: `%.*s` (%s)\n", files.items[ii], t.row, t.col, (int)t.len, t.src, tokentype_name[t.type]);
+            }
         } while (t.type != TOK_eof);
     }
     da_free(files);
